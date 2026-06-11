@@ -1,0 +1,13 @@
+# Wallet files — NEVER commit private keys
+evm_wallets*.txt
+wallets*.txt
+*.key
+*_results.json
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
