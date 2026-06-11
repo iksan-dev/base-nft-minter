@@ -25,9 +25,16 @@ mintPublic(nftContract, feeRecipient, minterIfNotPayer, quantity)
   quantity         = 1
 ```
 
-To get the calldata for a different drop: open any recent successful mint
-tx for that collection on a block explorer, copy its raw input data, and
-pass it via `--calldata`.
+To mint, you only **select the target NFT contract** — `mint.py` builds
+the calldata for you via `build_mint_public_calldata()` in `common.py`:
+
+```bash
+python mint.py wallets.txt --nft 0xNFT_CONTRACT
+```
+
+For a **non-OpenSea drop**, skip the builder: open any recent successful
+mint tx for that collection on a block explorer, copy its raw input data,
+and pass it via `--minter 0x... --calldata 0x...`.
 
 ## Pipeline
 
@@ -41,10 +48,10 @@ python generate_wallets.py 100 wallets.txt
 #    funder = line #1 of the funder file
 python fund.py wallets.txt --amount-wei 12094274872632 --funder-file funder.txt
 
-# 3. mint one NFT from each wallet
-python mint.py wallets.txt \
-    --minter 0x00005ea00ac477b1030ce78506496e8c2de24bf5 \
-    --calldata 0x161ac21f...
+# 3. mint one NFT from each wallet — just select the target NFT contract
+python mint.py wallets.txt --nft 0xe35b7e37c125abeee67809d89173dd03e473e3a4
+#    (calldata is auto-built for OpenSea's mintPublic; for a non-OpenSea
+#     drop, pass --minter 0x... --calldata 0x... instead)
 
 # 4. gather every NFT into one collector
 python transfer.py wallets.txt mint_results.json \
